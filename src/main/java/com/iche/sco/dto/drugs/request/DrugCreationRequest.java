@@ -1,11 +1,8 @@
-package com.iche.sco.dto.request;
+package com.iche.sco.dto.request.drugServiceRequest;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 

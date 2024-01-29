@@ -1,4 +1,4 @@
-package com.iche.sco.dto.request;
+package com.iche.sco.dto.request.drugServiceRequest;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.DecimalMin;
