@@ -1,2 +1,5 @@
-package com.iche.sco.enums;public class Role {
+package com.iche.sco.enums;
+
+public enum Role {
+    USER,VENDOR,RIDER,ADMIN
 }

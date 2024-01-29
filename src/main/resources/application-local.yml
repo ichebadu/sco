@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 12345678
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 6732
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jazzmaniche@gmail.com
+    password: jdlmzauqclzhrsgv
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+jwt:
+  expiration:
+    access_token: 8640000
+    refresh_token: 60480000
+  secret_key: "0S07aPkGwOoB1GLEtYPIHaeyQ8VLkKisUMPrKtPt6KQ3NXB6giH2AiXotG5oRDzO4XpjGaXcw6TomIYUbxVkew=="
+paystack_public_key: "pk_test_5215f0b38e8bbcbfaccc2ab8aeeba101ec4c9426"
+paystack_secret_key: "sk_test_43c16cd9f5078dc9e24d51019af9be42b7921432"
+logging:
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG

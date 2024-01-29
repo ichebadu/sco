@@ -1,11 +1,10 @@
-package com.iche.sco.dto.request.payment.paystack;
+package com.iche.sco.dto.payment.paystack.dto;
 
 import lombok.Data;
 
 
 @Data
 public class BankData {
-
     private int id;
     private String name;
     private String slug;

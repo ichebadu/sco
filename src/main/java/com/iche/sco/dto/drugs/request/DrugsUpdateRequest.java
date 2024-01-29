@@ -1,4 +1,4 @@
-package com.iche.sco.dto.request.drugServiceRequest;
+package com.iche.sco.dto.drugs.request;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.DecimalMin;
@@ -14,7 +14,10 @@ public record DrugsUpdateRequest (
         Long id,
         @Column(name = "drugs_name", nullable = false)
         @NotNull(message = "enter drug name")
-        String name,
+        String drugName,
+        @Column(name = "user_name", nullable = false)
+        @NotNull(message = "enter user name")
+        String userEmail,
         @Column(name = "drugs_price", nullable = false)
         @NotNull(message = "enter drug price")
         BigDecimal price,

@@ -1,4 +1,4 @@
-package com.iche.xpresspayapi.configuration;
+package com.iche.sco.applicationConfig;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

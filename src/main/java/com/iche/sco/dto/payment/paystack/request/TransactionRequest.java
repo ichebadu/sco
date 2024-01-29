@@ -1,4 +1,4 @@
-package com.iche.sco.dto.request.payment.paystack;
+package com.iche.sco.dto.payment.paystack.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -7,4 +7,10 @@ public interface Endpoint {
     String UPDATE = "/update";
     String LIST_OF_DRUGS = "/list";
     String SINGLE_OF_DRUG = "/{id}";
+    String AUTH_LOGOUT = "/logout";
+    String REGISTRATION ="/registration";
+    String VERIFICATION = "/verification";
+    String LOGIN = "login";
+    String AUTH_BASE_URL = "api/v1/auth";
+
 }

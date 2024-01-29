@@ -1,4 +1,4 @@
-package com.iche.sco.dto.response;
+package com.iche.sco.dto.payment.paystack.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Embeddable;
@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Embeddable
-public class InnerData {
+public class Payload {
     @JsonProperty("authorization_url")
     private String authorizationUrl;
     @JsonProperty("access_code")

@@ -1,6 +1,7 @@
-package com.iche.xpresspayapi.repository;
+package com.iche.sco.respository;
 
-import com.iche.xpresspayapi.model.Token;
+
+import com.iche.sco.model.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.iche.sco.dto.request.userServiceRequest;
+package com.iche.sco.dto.user.request;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;

@@ -1,9 +1,9 @@
-package com.iche.xpresspayapi.utils;
+package com.iche.sco.utils;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.iche.xpresspayapi.exceptions.InputNotValidException;
+import com.iche.sco.exception.InputValidationException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -30,7 +30,7 @@ public class Validations<T> {
             }
             try {
                 String jsonErrorMessage = objectMapper.writeValueAsString(errorMessagesSet);
-                throw new InputNotValidException(jsonErrorMessage);
+                throw new InputValidationException(jsonErrorMessage);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }

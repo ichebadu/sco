@@ -1,16 +1,15 @@
-package com.iche.sco.dto.response;
+package com.iche.sco.dto.payment.paystack.response;
 
+import com.iche.sco.dto.payment.paystack.dto.Payload;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
 @Embeddable
-public class  PaystackResponseVo {
+public class PaystackTransactionInitializationResponseVo {
     private String status;
     private String message;
-
-    private InnerData data;
+    private Payload data;
 }

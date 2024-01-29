@@ -1,2 +1,4 @@
-package com.iche.sco.service.accountService;public interface AccountService {
+package com.iche.sco.service.accountService;
+
+public interface AccountService {
 }

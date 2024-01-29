@@ -1,4 +1,4 @@
-package com.iche.sco.dto.response.globalResponse;
+package com.iche.sco.dto.globalResponse;
 
 import com.iche.sco.utils.DateUtils;
 import lombok.AllArgsConstructor;

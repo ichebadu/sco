@@ -1,6 +1,6 @@
-package com.iche.sco.dto.response;
+package com.iche.sco.dto.payment.paystack.response;
 
-import com.iche.sco.dto.request.payment.paystack.BankData;
+import com.iche.sco.dto.payment.paystack.dto.BankData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

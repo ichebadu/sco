@@ -1,19 +1,21 @@
-package com.iche.xpresspayapi.service.userService;
+package com.iche.sco.service.userService;
 
-import com.iche.xpresspayapi.dto.request.userRequest.LoginRequest;
-import com.iche.xpresspayapi.dto.request.userRequest.RegistrationRequest;
-import com.iche.xpresspayapi.dto.response.APIResponse;
-import com.iche.xpresspayapi.dto.response.userRequest.LoginResponse;
-import com.iche.xpresspayapi.dto.response.userRequest.RegistrationResponse;
-import com.iche.xpresspayapi.enums.Role;
-import com.iche.xpresspayapi.exceptions.*;
-import com.iche.xpresspayapi.model.Token;
-import com.iche.xpresspayapi.model.Users;
-import com.iche.xpresspayapi.notificationEvent.registrationEvent.UserRegistrationEvent;
-import com.iche.xpresspayapi.repository.UserRepository;
-import com.iche.xpresspayapi.service.securityService.JwtService;
-import com.iche.xpresspayapi.service.tokenService.TokenServiceImpl;
-import com.iche.xpresspayapi.utils.Validations;
+
+import com.iche.sco.dto.user.request.LoginRequest;
+import com.iche.sco.dto.user.request.RegistrationRequest;
+import com.iche.sco.enums.ResponseCode;
+import com.iche.sco.dto.globalResponse.APIResponse;
+import com.iche.sco.dto.user.response.LoginResponse;
+import com.iche.sco.dto.user.response.RegistrationResponse;
+import com.iche.sco.enums.Role;
+import com.iche.sco.exception.*;
+import com.iche.sco.model.Token;
+import com.iche.sco.model.Users;
+import com.iche.sco.registrationEvent.UserRegistrationEvent;
+import com.iche.sco.respository.UserRepository;
+import com.iche.sco.security.JwtService;
+import com.iche.sco.service.tokenService.TokenServiceImpl;
+import com.iche.sco.utils.Validations;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -22,6 +24,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -51,8 +55,9 @@ public class UserServiceImpl implements UserService {
                 .lastName(registrationRequest.getFirstName())
                 .email(registrationRequest.getEmail())
                 .phoneNumber(registrationRequest.getPhoneNumber())
+                .createDate(LocalDateTime.now())
     //            .phoneNumber(formattedPhoneNumber)
-                .role(Role.USER)
+                .role(registrationRequest.getRole())
                 .status(false)
                 .password(passwordEncoder.encode(registrationRequest.getPassword()))
                 .build();
@@ -74,7 +79,7 @@ public class UserServiceImpl implements UserService {
                 .username(user.getUsername())
                 .message("Registration Successful")
                 .build();
-        return new APIResponse<>(registrationResponse);
+        return new APIResponse<>(ResponseCode.REGISTRATION_SUCCESS_RESPONSE.getMessage(),ResponseCode.REGISTRATION_SUCCESS_RESPONSE.getStatusCode(), registrationResponse);
     }
 
     @Override
@@ -102,7 +107,7 @@ public class UserServiceImpl implements UserService {
                 .accessToken(jwtAccessToken)
                 .refreshToken(jwtRefreshToken)
                 .build();
-        return new APIResponse<>(loginResponse);
+        return new APIResponse<>(ResponseCode.LOGIN_SUCCESS_RESPONSE.getMessage(),ResponseCode.LOGIN_SUCCESS_RESPONSE.getStatusCode(), loginResponse);
     }
     public void validateUserExistence(String email){
         if(userRepository.existsByEmail(email)){

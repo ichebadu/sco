@@ -1,11 +1,12 @@
-package com.iche.xpresspayapi.service.userService;
+package com.iche.sco.service.userService;
 
-import com.iche.xpresspayapi.dto.request.userRequest.LoginRequest;
-import com.iche.xpresspayapi.dto.request.userRequest.RegistrationRequest;
-import com.iche.xpresspayapi.dto.response.APIResponse;
-import com.iche.xpresspayapi.dto.response.userRequest.LoginResponse;
-import com.iche.xpresspayapi.dto.response.userRequest.RegistrationResponse;
-import com.iche.xpresspayapi.model.Users;
+
+import com.iche.sco.dto.user.request.LoginRequest;
+import com.iche.sco.dto.user.request.RegistrationRequest;
+import com.iche.sco.dto.globalResponse.APIResponse;
+import com.iche.sco.dto.user.response.LoginResponse;
+import com.iche.sco.dto.user.response.RegistrationResponse;
+import com.iche.sco.model.Users;
 
 public interface UserService {
     APIResponse<RegistrationResponse> registerUser(RegistrationRequest registrationRequest);

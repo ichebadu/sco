@@ -1,7 +1,6 @@
 package com.iche.sco.model;
 
-import com.iche.sco.enums.PaymentType;
-import com.iche.sco.enums.TransactionStatus;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,4 +25,17 @@ public class Drugs {
     @Column(name = "drugs_packs", nullable = false)
     private int packs;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Users user;
+//    @CreatedBy
+//    @Column(
+//            nullable = false,
+//            updatable = false
+//    )
+//    private LocalDateTime createDate;
+//    @LastModifiedBy
+//    @Column(
+//            insertable = false
+//    )
+//    private LocalDateTime lastModified;
 }

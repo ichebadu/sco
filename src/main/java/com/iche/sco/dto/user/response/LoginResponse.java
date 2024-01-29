@@ -1,4 +1,4 @@
-package com.iche.sco.dto.response.userServiceResponse;
+package com.iche.sco.dto.user.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

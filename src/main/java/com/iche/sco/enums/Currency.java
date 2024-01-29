@@ -1,4 +1,4 @@
-package com.sm.shopmore.entity.payment;
+package com.iche.sco.enums;
 
 public enum Currency {
     USD,

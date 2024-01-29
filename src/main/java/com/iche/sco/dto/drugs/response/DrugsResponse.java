@@ -1,4 +1,4 @@
-package com.iche.sco.dto.response;
+package com.iche.sco.dto.drugs.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

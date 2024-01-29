@@ -1,9 +1,10 @@
-package com.iche.xpresspayapi.service.tokenService;
+package com.iche.sco.service.tokenService;
 
-import com.iche.xpresspayapi.dto.request.userRequest.OtpVerificationRequest;
-import com.iche.xpresspayapi.dto.response.APIResponse;
-import com.iche.xpresspayapi.model.Token;
-import com.iche.xpresspayapi.model.Users;
+
+import com.iche.sco.dto.user.request.OtpVerificationRequest;
+import com.iche.sco.dto.globalResponse.APIResponse;
+import com.iche.sco.model.Token;
+import com.iche.sco.model.Users;
 
 public interface TokenService {
     APIResponse<String> verifyUserOtp(OtpVerificationRequest otpVerificationRequest);

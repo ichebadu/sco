@@ -1,7 +1,7 @@
 package com.iche.sco.exception;
 
-import com.iche.sco.dto.response.ApiResponse;
-import com.iche.sco.dto.response.ResponseCode;
+import com.iche.sco.dto.globalResponse.APIResponse;
+import com.iche.sco.enums.ResponseCode;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(InputValidationException.class)
-    public ResponseEntity<ApiResponse<ExceptionResponse>> inputValidationException(InputValidationException e, HttpServletRequest httpServletRequest){
+    public ResponseEntity<APIResponse<ExceptionResponse>> inputValidationException(InputValidationException e, HttpServletRequest httpServletRequest){
         ExceptionResponse exceptionResponse = getExceptionResponse(e, httpServletRequest);
 
-        ApiResponse apiResponse = ApiResponse.builder()
+        APIResponse apiResponse = APIResponse.builder()
                 .message(ResponseCode.CREATE_DRUG_REQUEST_FAILED.getMessage())
                 .time(String.valueOf(System.currentTimeMillis()))
                 .statusCode(ResponseCode.CREATE_DRUG_REQUEST_FAILED.getStatusCode())
@@ -25,10 +25,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(InternalServerError.class)
-    public ResponseEntity<ApiResponse<ExceptionResponse>> InternalServerError(InternalServerError e, HttpServletRequest httpServletRequest){
+    public ResponseEntity<APIResponse<ExceptionResponse>> InternalServerError(InternalServerError e, HttpServletRequest httpServletRequest){
         ExceptionResponse exceptionResponse = getExceptionResponse(e, httpServletRequest);
 
-        ApiResponse apiResponse = ApiResponse.builder()
+        APIResponse apiResponse = APIResponse.builder()
                 .message(ResponseCode.CREATE_DRUG_REQUEST_FAILED.getMessage())
                 .time(String.valueOf(System.currentTimeMillis()))
                 .statusCode(ResponseCode.CREATE_DRUG_REQUEST_FAILED.getStatusCode())
@@ -38,10 +38,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DrugNotFoundException.class)
-    public ResponseEntity<ApiResponse<ExceptionResponse>> DrugNotFoundException(DrugNotFoundException e, HttpServletRequest httpServletRequest){
+    public ResponseEntity<APIResponse<ExceptionResponse>> DrugNotFoundException(DrugNotFoundException e, HttpServletRequest httpServletRequest){
         ExceptionResponse exceptionResponse = getExceptionResponse(e, httpServletRequest);
 
-        ApiResponse apiResponse = ApiResponse.builder()
+        APIResponse apiResponse = APIResponse.builder()
                 .message(ResponseCode.CREATE_DRUG_REQUEST_FAILED.getMessage())
                 .time(String.valueOf(System.currentTimeMillis()))
                 .statusCode(ResponseCode.CREATE_DRUG_REQUEST_FAILED.getStatusCode())

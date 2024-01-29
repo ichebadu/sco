@@ -1,16 +1,19 @@
-package com.iche.xpresspayapi.utils;
+package com.iche.sco.utils;
 
-import com.iche.xpresspayapi.exceptions.UserNotFoundException;
-import com.iche.xpresspayapi.model.Users;
-import com.iche.xpresspayapi.repository.UserRepository;
+
+import com.iche.sco.exception.UserNotFoundException;
+import com.iche.sco.model.Users;
+import com.iche.sco.respository.UserRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
+
 
 @Data
 @RequiredArgsConstructor
-@Service
+@Component
 public class UserVerification {
     private final UserRepository userRepository;
 
@@ -18,7 +21,17 @@ public class UserVerification {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not Found"));
     }
-    public static String getUserEmailFromContext(){
+    public String getUserEmailFromContext(){
         return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    public Users validateLoginUser(String email){
+        Users user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not Found"));
+
+        if(!user.getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+            throw new UsernameNotFoundException("this is not the log in user");
+        }
+        return user;
     }
 }

@@ -1,19 +1,21 @@
-package com.iche.xpresspayapi.service.tokenService;
+package com.iche.sco.service.tokenService;
 
 
-import com.iche.xpresspayapi.dto.request.userRequest.OtpVerificationRequest;
-import com.iche.xpresspayapi.dto.response.APIResponse;
-import com.iche.xpresspayapi.exceptions.InvalidCredentialsException;
-import com.iche.xpresspayapi.exceptions.OtpException;
-import com.iche.xpresspayapi.exceptions.UserNotFoundException;
-import com.iche.xpresspayapi.model.Token;
-import com.iche.xpresspayapi.model.Users;
-import com.iche.xpresspayapi.notificationEvent.registrationEvent.UserRegistrationEvent;
-import com.iche.xpresspayapi.repository.TokenRepository;
-import com.iche.xpresspayapi.repository.UserRepository;
-import com.iche.xpresspayapi.utils.RandomGeneratedValue;
-import com.iche.xpresspayapi.utils.UserVerification;
-import com.iche.xpresspayapi.utils.Validations;
+
+import com.iche.sco.dto.user.request.OtpVerificationRequest;
+import com.iche.sco.dto.globalResponse.APIResponse;
+import com.iche.sco.enums.ResponseCode;
+import com.iche.sco.exception.InvalidCredentialsException;
+import com.iche.sco.exception.OtpException;
+import com.iche.sco.exception.UserNotFoundException;
+import com.iche.sco.model.Token;
+import com.iche.sco.model.Users;
+import com.iche.sco.registrationEvent.UserRegistrationEvent;
+import com.iche.sco.respository.TokenRepository;
+import com.iche.sco.respository.UserRepository;
+import com.iche.sco.utils.RandomGeneratedValue;
+import com.iche.sco.utils.UserVerification;
+import com.iche.sco.utils.Validations;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -48,7 +51,7 @@ public class TokenServiceImpl implements TokenService{
         log.info(confirmationTokenConfirmation.getUser().toString());
         user.setStatus(true);
         userRepository.save(user);
-        return new APIResponse<>("activate");
+        return new APIResponse<>(ResponseCode.VERIFICATION_SUCCESS_RESPONSE.getMessage(), ResponseCode.VERIFICATION_SUCCESS_RESPONSE.getStatusCode(),"account verified");
 
     }
     @Override

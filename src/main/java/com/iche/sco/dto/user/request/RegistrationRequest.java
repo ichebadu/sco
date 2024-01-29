@@ -1,8 +1,9 @@
-package com.iche.sco.dto.request.userServiceRequest;
+package com.iche.sco.dto.user.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.iche.sco.enums.Role;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -34,5 +35,8 @@ public class RegistrationRequest {
     @Column(name = "password", nullable = false)
     @Pattern(regexp = "^[^?*!\\\\/$%^()~<>?\":}{\\[\\]|+=_\\-&#@.,;]+$", message = "Invalid password format")
     private String password;
+
+    @Column(name = "password", nullable = false)
+    private Role role;
 
 }

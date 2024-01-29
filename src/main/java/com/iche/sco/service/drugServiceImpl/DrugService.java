@@ -1,21 +1,22 @@
 package com.iche.sco.service.drugServiceImpl;
 
-import com.iche.sco.dto.request.DrugCreationRequest;
-import com.iche.sco.dto.request.DrugsUpdateRequest;
-import com.iche.sco.dto.response.ApiResponse;
-import com.iche.sco.dto.response.DrugsResponse;
+import com.iche.sco.dto.drugs.request.DrugCreationRequest;
+import com.iche.sco.dto.drugs.request.DrugDeleteRequest;
+import com.iche.sco.dto.drugs.request.DrugsUpdateRequest;
+import com.iche.sco.dto.drugs.response.DrugsResponse;
+import com.iche.sco.dto.globalResponse.APIResponse;
 
 import java.util.List;
 
 public interface DrugService {
 
-    ApiResponse<DrugsResponse> createDrug(DrugCreationRequest drugCreationRequest);
+    APIResponse<DrugsResponse> createDrug(DrugCreationRequest drugCreationRequest);
 
-    ApiResponse<DrugsResponse> getSingleDrug(Long id);
+    APIResponse<DrugsResponse> getSingleDrug(Long id);
 
-    ApiResponse<List<DrugsResponse>> listOfDrugs();
+    APIResponse<List<DrugsResponse>> listOfDrugs();
 
-    ApiResponse<String> deleteDrug(Long id);
+    APIResponse<String> deleteDrug(DrugDeleteRequest drugDeleteRequest);
 
-    ApiResponse<DrugsResponse>updateDrug(DrugsUpdateRequest drugsUpdateRequest);
+    APIResponse<DrugsResponse>updateDrug(DrugsUpdateRequest drugsUpdateRequest);
 }

@@ -1,8 +1,8 @@
-package com.iche.xpresspayapi.notificationEvent.registrationEvent;
+package com.iche.sco.registrationEvent;
 
 
-import com.iche.xpresspayapi.configuration.MailConfig;
-import com.iche.xpresspayapi.model.Users;
+import com.iche.sco.applicationConfig.MailConfig;
+import com.iche.sco.model.Users;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -46,12 +46,12 @@ public class RegistrationEventListener implements ApplicationListener<UserRegist
 
         String mailContent =  "<div style='width:100%; background: #f8f8f8;' >"
                 + "<p style='font-size: 18px;'>Hello, " + user + "</p>"
-                + "<p style='font-size: 16px;'>" + "Welcome to XpressPayment </p>"
+                + "<p style='font-size: 16px;'>" + "Welcome to SCO </p>"
                 + "<p style='font-size: 16px;'>Thank you for registering with us.</p>"
                 + "<p style='font-size: 16px;'>Please enter your OTP below to complete your registration:</p>"
                 + "<h1 style='font-size: 24px; margin: 20px 0;'>" + otp + "</h1>"
                 + "<p style='font-size: 16px;'>Thank you,</p>"
-                + "<p style='font-size: 16px;'>XpressPayment</p>"
+                + "<p style='font-size: 16px;'>SCO</p>"
                 + "</div>";
         messageHelper.setText(mailContent, true);
     }

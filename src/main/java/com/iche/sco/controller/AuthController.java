@@ -1,25 +1,27 @@
-package com.iche.xpresspayapi.controllers;
+package com.iche.sco.controller;
 
-import com.iche.xpresspayapi.dto.request.userRequest.LoginRequest;
-import com.iche.xpresspayapi.dto.request.userRequest.OtpVerificationRequest;
-import com.iche.xpresspayapi.dto.request.userRequest.RegistrationRequest;
-import com.iche.xpresspayapi.dto.response.APIResponse;
-import com.iche.xpresspayapi.dto.response.userRequest.LoginResponse;
-import com.iche.xpresspayapi.dto.response.userRequest.RegistrationResponse;
-import com.iche.xpresspayapi.service.tokenService.TokenService;
-import com.iche.xpresspayapi.service.userService.UserService;
+
+import com.iche.sco.dto.user.request.LoginRequest;
+import com.iche.sco.dto.user.request.OtpVerificationRequest;
+import com.iche.sco.dto.user.request.RegistrationRequest;
+import com.iche.sco.dto.globalResponse.APIResponse;
+import com.iche.sco.dto.user.response.LoginResponse;
+import com.iche.sco.dto.user.response.RegistrationResponse;
+import com.iche.sco.service.tokenService.TokenService;
+import com.iche.sco.service.userService.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import static com.iche.xpresspayapi.utils.EndpointUtils.*;
-
+import static com.iche.sco.utils.Endpoint.*;
 
 @RestController
 @RequiredArgsConstructor

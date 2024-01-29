@@ -1,4 +1,4 @@
-package com.iche.xpresspayapi.exceptions;
+package com.iche.sco.exception;
 
 
 public class UserNotFoundException extends RuntimeException{

@@ -1,4 +1,4 @@
-package com.iche.sco.dto.request.userServiceRequest;
+package com.iche.sco.dto.user.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
