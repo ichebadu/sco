@@ -8,7 +8,6 @@ import com.iche.sco.dto.globalResponse.APIResponse;
 import com.iche.sco.enums.ResponseCode;
 import com.iche.sco.respository.AccountRepository;
 import com.iche.sco.respository.BankRepository;
-import com.iche.sco.respository.UserRepository;
 import com.iche.sco.utils.PaystackUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
@@ -24,7 +23,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaystackUtils paystackUtils;
     private final RestTemplate restTemplate;
     private final BankRepository bankRepository;
-    private final UserRepository userRepository;
+//    private final UserRepository userRepository;
     private final AccountRepository accountRepository;
     private final HttpHeaders headers;
 

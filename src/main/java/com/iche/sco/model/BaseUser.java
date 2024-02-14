@@ -1,12 +1,10 @@
 package com.iche.sco.model;
 
-import com.iche.sco.enums.Role;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,16 +12,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Table(name = "users")
-@Builder
+@Table(name = "base_user")
+@Getter
+@Setter
 @EntityListeners(AuditingEntityListener.class)
-public class Users implements UserDetails {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class BaseUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "user_id")
@@ -40,21 +40,20 @@ public class Users implements UserDetails {
     private String password;
     @Column(name = "phone_number")
     private String phoneNumber;
-    @CreatedBy
-    @Column(
-            nullable = false,
-            updatable = false
-    )
-    private LocalDateTime createDate;
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(nullable = false, updatable = false)
+    @CreatedDate
+//    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private Date createDate;
+ //   private LocalDateTime createDate;
+
+    @ManyToOne()
+    @JoinColumn(name = "role_id")
+    private Role roles;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Token token;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true)
-    private Set<Drugs> drugs;
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Set.of(new SimpleGrantedAuthority(role.name()));
+        return Set.of(new SimpleGrantedAuthority("ROLE_"+ roles.getRoleName()));
     }
     @Override
     public String getPassword() {

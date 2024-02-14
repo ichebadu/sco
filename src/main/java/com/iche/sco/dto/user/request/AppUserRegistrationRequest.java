@@ -3,7 +3,6 @@ package com.iche.sco.dto.user.request;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.iche.sco.enums.Role;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -16,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RegistrationRequest {
+public class AppUserRegistrationRequest {
     @JsonProperty("first_name")
     @NotBlank(message = "first name cannot be empty")
     private String firstName;
@@ -35,8 +34,15 @@ public class RegistrationRequest {
     @Column(name = "password", nullable = false)
     @Pattern(regexp = "^[^?*!\\\\/$%^()~<>?\":}{\\[\\]|+=_\\-&#@.,;]+$", message = "Invalid password format")
     private String password;
+    @Column(name = "role", nullable = false)
+    private String role;
 
-    @Column(name = "password", nullable = false)
-    private Role role;
-
+    public AppUserRegistrationRequest(GlobalRegistrationRequest registrationRequest){
+        this.firstName = registrationRequest.getFirstName();
+        this.lastName = registrationRequest.getLastName();
+        this.email = registrationRequest.getEmail();
+        this.phoneNumber = registrationRequest.getPhoneNumber();
+        this.password = registrationRequest.getPassword();
+        this.role =registrationRequest.getRole();
+    }
 }

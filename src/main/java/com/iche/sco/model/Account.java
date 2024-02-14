@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 
 @Entity
 @NoArgsConstructor
@@ -20,5 +19,5 @@ public class Account {
     private String accountNumber;
     private String bank;
     @OneToOne
-    private Users users;
+    private BaseUser baseUser;
 }

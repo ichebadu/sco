@@ -1,11 +1,14 @@
 package com.iche.sco.dto.drugs.response;
 
+import com.iche.sco.enums.DrugStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @AllArgsConstructor
 @Builder
@@ -17,4 +20,8 @@ public class DrugsResponse {
     private String name;
     private BigDecimal price;
     private int packs;
+    private String merchantId;
+    private DrugStatus drugStatus;
+    private String createDate;
+    private String updateDate;
 }

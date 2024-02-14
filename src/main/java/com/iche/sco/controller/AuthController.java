@@ -1,12 +1,11 @@
 package com.iche.sco.controller;
 
 
+import com.iche.sco.dto.user.request.GlobalRegistrationRequest;
 import com.iche.sco.dto.user.request.LoginRequest;
 import com.iche.sco.dto.user.request.OtpVerificationRequest;
-import com.iche.sco.dto.user.request.RegistrationRequest;
 import com.iche.sco.dto.globalResponse.APIResponse;
 import com.iche.sco.dto.user.response.LoginResponse;
-import com.iche.sco.dto.user.response.RegistrationResponse;
 import com.iche.sco.service.tokenService.TokenService;
 import com.iche.sco.service.userService.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,11 +39,18 @@ public class AuthController {
     )
     @ApiResponse(responseCode = "200", description = "Http status 200 SUCCESS")
     @PostMapping(REGISTRATION)
-    public ResponseEntity<APIResponse<RegistrationResponse>> registerAnyUser(@Valid
-            @RequestBody RegistrationRequest registrationRequest
+    public ResponseEntity<APIResponse<?>> registerAnyUser(@Valid
+            @RequestBody GlobalRegistrationRequest registrationRequest
     ){
         return new ResponseEntity<>(userService.registerUser(registrationRequest), HttpStatus.CREATED);
     }
+//    @ApiResponse(responseCode = "200", description = "Http status 200 SUCCESS")
+//    @PostMapping(APPUSER_REGISTRATION)
+//    public ResponseEntity<APIResponse<RegistrationResponse>> registerMerchant(@Valid
+//            @RequestBody RegistrationRequest registrationRequest
+//    ){
+//        return new ResponseEntity<>(userService.registerUser(registrationRequest), HttpStatus.CREATED);
+//    }
     @PostMapping(VERIFICATION)
     @Operation(
             summary = "User Verification REST API",

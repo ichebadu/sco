@@ -14,6 +14,9 @@ public record DrugCreationRequest(
         @Column(name = "drugs_name", nullable = false)
         @NotNull(message = "enter drug name")
         String drugName,
+        @Column(name = "merchant_id", nullable = false)
+        @NotNull(message = "enter drug name")
+        String merchantId,
         @Column(name = "user_name", nullable = false)
         @NotNull(message = "enter user name")
         String userEmail,

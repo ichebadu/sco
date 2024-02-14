@@ -8,11 +8,9 @@ import com.iche.sco.enums.ResponseCode;
 import com.iche.sco.exception.InvalidCredentialsException;
 import com.iche.sco.exception.OtpException;
 import com.iche.sco.exception.UserNotFoundException;
-import com.iche.sco.model.Token;
-import com.iche.sco.model.Users;
+import com.iche.sco.model.*;
 import com.iche.sco.registrationEvent.UserRegistrationEvent;
 import com.iche.sco.respository.TokenRepository;
-import com.iche.sco.respository.UserRepository;
 import com.iche.sco.utils.RandomGeneratedValue;
 import com.iche.sco.utils.UserVerification;
 import com.iche.sco.utils.Validations;
@@ -23,39 +21,40 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class TokenServiceImpl implements TokenService{
+public class TokenServiceImpl<T extends BaseUser> implements TokenService<T>{
     private final TokenRepository confirmationTokenRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final UserVerification userVerification;
-    private final UserRepository userRepository;
 
     private final Validations<OtpVerificationRequest> otpVerificationRequestValidations;
 
     @Override
     public APIResponse<String> verifyUserOtp(OtpVerificationRequest otpVerificationRequest) {
         otpVerificationRequestValidations.validate(otpVerificationRequest);
-        Users user = userVerification.verifyUserByEmail(otpVerificationRequest.getEmail());
+        BaseUser user = userVerification.verifyUserByEmail(otpVerificationRequest.getEmail());
 
         log.info("Verifying OTP: " + user.getEmail());
         Token confirmationTokenConfirmation = confirmationTokenRepository.findByUser_EmailAndOtp(user.getEmail(), otpVerificationRequest.getOtp());
         System.out.println(confirmationTokenConfirmation);
 
-        if (confirmationTokenConfirmation == null && isOtpExpired(confirmationTokenConfirmation)) {
+        if (confirmationTokenConfirmation == null || isOtpExpired(confirmationTokenConfirmation)) {
             throw new InvalidCredentialsException("invalid or Expired credential");
-
         }
-        log.info(confirmationTokenConfirmation.getUser().toString());
         user.setStatus(true);
-        userRepository.save(user);
+        userVerification.saveUser(user);
+        log.info(confirmationTokenConfirmation.getUser().toString());
+
         return new APIResponse<>(ResponseCode.VERIFICATION_SUCCESS_RESPONSE.getMessage(), ResponseCode.VERIFICATION_SUCCESS_RESPONSE.getStatusCode(),"account verified");
 
     }
     @Override
-    public void sendOtp(Users user, String otp, Token newConfirmationToken){
+    public void sendOtp(BaseUser user, String otp, Token newConfirmationToken){
         Token foundConfirmationToken = confirmationTokenRepository.findByUserId(user.getId());
 
         if(foundConfirmationToken != null){
@@ -68,11 +67,18 @@ public class TokenServiceImpl implements TokenService{
 
     @Override
     public boolean isOtpExpired(Token confirmationToken){
-        LocalDateTime otpCreatedAt = confirmationToken.getExpiresAt();
+        Date otpCreatedAt = confirmationToken.getExpiresAt();
         LocalDateTime currentDateTime = LocalDateTime.now();
-        Duration duration = Duration.between(otpCreatedAt, currentDateTime);
+
+        // Convert Date to LocalDateTime
+        LocalDateTime otpCreatedLocalDateTime = LocalDateTime.ofInstant(otpCreatedAt.toInstant(), ZoneId.systemDefault());
+
+        // Calculate the duration between OTP creation and current time
+        Duration duration = Duration.between(otpCreatedLocalDateTime, currentDateTime);
+
         long minutesPassed = duration.toMinutes();
-        long otpExpiresAt = 4;
+        long otpExpiresAt = 4; // Assuming OTP expires in 4 minutes
+
         return minutesPassed > otpExpiresAt;
     }
     @Override
@@ -80,9 +86,20 @@ public class TokenServiceImpl implements TokenService{
         confirmationTokenRepository.save(confirmationToken);
     }
     @Override
-    public Token generateOtp(Users user) {
+    public Token generateOtp(BaseUser user) {
         String otp = RandomGeneratedValue.generateRandomValues();
-        return new Token(otp, user);
+        Token token;
+        if(user instanceof Admin admin){
+            token  = new Token(otp, admin);
+        } else if(user instanceof Merchant merchant){
+            token  = new Token(otp, merchant);
+        }
+        else if(user instanceof AppUser appUser){
+            token  = new Token(otp, appUser);
+        } else {
+            throw new IllegalArgumentException("Invalid user");
+        }
+        return token;
     }
     @Override
     public String verifyToken(String token){

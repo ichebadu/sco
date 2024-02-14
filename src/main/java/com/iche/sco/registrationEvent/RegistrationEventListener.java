@@ -2,7 +2,7 @@ package com.iche.sco.registrationEvent;
 
 
 import com.iche.sco.applicationConfig.MailConfig;
-import com.iche.sco.model.Users;
+import com.iche.sco.model.BaseUser;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class RegistrationEventListener implements ApplicationListener<UserRegist
     @Override
     public void onApplicationEvent(UserRegistrationEvent event) {
         String otp = event.getOtp();
-        Users user = event.getUser();
+        BaseUser user = event.getUser();
         String email = user.getEmail();
         try {
             otpGenerator(email, otp);

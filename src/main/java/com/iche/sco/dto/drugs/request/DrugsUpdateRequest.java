@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 public record DrugsUpdateRequest (
         @Column(name = "drug_id", nullable = false)
         Long id,
+        @Column(name = "merchant_id", nullable = false)
+        Long merchantId,
         @Column(name = "drugs_name", nullable = false)
         @NotNull(message = "enter drug name")
         String drugName,
