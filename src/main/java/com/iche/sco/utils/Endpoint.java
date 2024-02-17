@@ -7,8 +7,8 @@ public interface Endpoint {
     String DELETE = "/delete/{id}";
     String UPDATE = "/update";
     String SPECIFICATION_SEARCH = "/specification-search";
-
     String LIST_OF_DRUGS = "/list";
+    String LIST_OF_DRUGS_MERCHANT = "/list/merchant-stock";
     String SINGLE_OF_DRUG = "/{id}";
     String AUTH_LOGOUT = "/logout";
     String REGISTRATION ="/registration";

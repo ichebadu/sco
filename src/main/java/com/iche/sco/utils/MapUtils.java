@@ -32,4 +32,12 @@ public class MapUtils {
         appUser.setStatus(false);
         return appUser;
     }
+    public static Drugs drugsMap(Drugs drug) {
+        Drugs drugs = new Drugs();
+        drugs.setDrugName(drug.getDrugName());
+        drugs.setPrice(drug.getPrice());
+        drugs.setPacks(drug.getPacks());
+        drugs.setUpdateAt(drug.getUpdateAt());
+        return drugs;
+    }
 }

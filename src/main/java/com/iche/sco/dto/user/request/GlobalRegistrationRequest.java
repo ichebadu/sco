@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GlobalRegistrationRequest {
-
     @JsonProperty("first_name")
     private String firstName;
     @JsonProperty("last_name")

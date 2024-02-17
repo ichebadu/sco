@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistsException("Phone number is already registered.");
         }
 
-        if (registrationRequest.getRole().equals("ROLE_APPUSER")) {
+        if (registrationRequest.getRole().equals("ROLE_USER")) {
             AppUser appUser = mapUtils.mapRequestToAppUser(appUserRegistrationRequest, formattedPhoneNumber);
             appUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
             appUser.setRoles(validateRoleExists(appUserRegistrationRequest.getRole()));

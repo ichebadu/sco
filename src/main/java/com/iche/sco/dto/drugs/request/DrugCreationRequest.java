@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 
 @Builder
 public record DrugCreationRequest(
-
         @Column(name = "drugs_name", nullable = false)
         @NotNull(message = "enter drug name")
         String drugName,

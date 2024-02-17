@@ -14,7 +14,6 @@ import java.util.Date;
 @Data
 public class AppUser extends BaseUser{
     private Date dateOfBirth;
-    private String phone;
     @Enumerated(EnumType.STRING)
     private Gender gender;
 

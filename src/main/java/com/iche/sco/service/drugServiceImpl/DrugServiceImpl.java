@@ -1,12 +1,9 @@
 package com.iche.sco.service.drugServiceImpl;
 
-import com.iche.sco.search.criteriaSearch.DrugCriteriaRepository;
 import com.iche.sco.dto.drugs.request.DrugCreationRequest;
 import com.iche.sco.dto.drugs.request.DrugDeleteRequest;
-import com.iche.sco.search.specificationCriteriaSearch.SpecificationInput;
 import com.iche.sco.dto.drugs.request.DrugsUpdateRequest;
 import com.iche.sco.dto.drugs.response.DrugsResponse;
-import com.iche.sco.search.specificationCriteriaSearch.DrugPageConstant;
 import com.iche.sco.enums.DrugStatus;
 import com.iche.sco.enums.MerchantType;
 import com.iche.sco.enums.ResponseCode;
@@ -20,24 +17,19 @@ import com.iche.sco.model.BaseUser;
 import com.iche.sco.model.Merchant;
 import com.iche.sco.respository.DrugRepository;
 import com.iche.sco.respository.MerchantRepository;
-import com.iche.sco.search.specificationCriteriaSearch.DrugSpecifications;
-import com.iche.sco.search.criteriaSearch.DrugCriteriaSearch;
+import com.iche.sco.specificationCriteriaSearch.CriteriaSpecificationsService;
 import com.iche.sco.utils.DateUtils;
 import com.iche.sco.utils.PageUtils;
 import com.iche.sco.utils.UserVerification;
 import com.iche.sco.utils.ValidationUtils;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,9 +40,9 @@ import java.util.stream.Collectors;
 public class DrugServiceImpl implements DrugService {
     private final DrugRepository drugRepository;
     private final MerchantRepository merchantRepository;
-    private final DrugCriteriaRepository drugCriteriaRepository;
     private final ValidationUtils<DrugCreationRequest> drugCreationRequestValidationUtils;
     private final UserVerification userVerification;
+    public final CriteriaSpecificationsService criteriaSpecificationsService;
 
 
     @Override
@@ -87,7 +79,6 @@ public class DrugServiceImpl implements DrugService {
 
         return new APIResponse<>(ResponseCode.CREATE_DRUG_REQUEST_SUCCESSFUL.getMessage(), ResponseCode.CREATE_DRUG_REQUEST_SUCCESSFUL.getStatusCode(),response);
     }
-
     @Override
     public APIResponse<DrugsResponse> getSingleDrug(Long id) {
 
@@ -109,42 +100,81 @@ public class DrugServiceImpl implements DrugService {
                 .build();
         return new APIResponse<>(ResponseCode.CREATE_DRUG_REQUEST_SUCCESSFUL.getMessage(), ResponseCode.CREATE_DRUG_REQUEST_SUCCESSFUL.getStatusCode(),response);
     }
-
     @Override
-    public APIResponse<PageUtils<DrugsResponse>> listOfDrugs(Integer pageNo, Integer pageSize, String sortBy, String sortDir) {
+    public APIResponse<PageUtils<DrugsResponse>> listOfDrugsMerchant(Integer pageNo, Integer pageSize, String sortBy, String sortDir, String type) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
-
-        Page<Drugs> drugsPage = drugRepository.findAll(pageable);
-
-        List<DrugsResponse> response = drugsPage.getContent().stream()
-                .filter(drug -> drug.getDrugStatus() != DrugStatus.REMOVE)
+        Page<Drugs> drugs = drugRepository.findByDrugStatus(DrugStatus.valueOf(type),pageable);
+        List<DrugsResponse> response = drugs.stream()
                 .map(drug -> DrugsResponse.builder()
                         .id(drug.getId())
                         .name(drug.getDrugName())
                         .price(drug.getPrice())
                         .packs(drug.getPacks())
-                        .drugStatus(DrugStatus.IN_STOCK)
+                        .drugStatus(drug.getDrugStatus())
                         .merchantId(drug.getMerchant().getId().toString())
                         .createDate(DateUtils.saveDate(drug.getCreateDate()))
                         .updateDate(DateUtils.saveDate(drug.getUpdateAt()))
                         .build()
                 ).collect(Collectors.toList());
+        int actualPageSize = response.size();
 
         PageUtils<DrugsResponse> pageUtils = PageUtils.<DrugsResponse>builder()
                 .content(response)
-                .pageNo(drugsPage.getNumber())
-                .pageSize(drugsPage.getSize())
-                .totalElement(drugsPage.getTotalElements())
-                .totalPage(drugsPage.getTotalPages())
-                .isLast(drugsPage.isLast())
+                .pageNo(drugs.getNumber())
+                .pageSize(actualPageSize)
+                .totalElement(drugs.getTotalElements())
+                .totalPage(drugs.getTotalPages())
+                .isLast(drugs.isLast())
                 .build();
 
         log.info("RESPONSE", response);
         return new APIResponse<>(ResponseCode.VIEW_DRUG_REQUEST_SUCCESSFUL.getMessage(), ResponseCode.VIEW_DRUG_REQUEST_SUCCESSFUL.getStatusCode(), pageUtils);
     }
+    @Override
+    public APIResponse<PageUtils<DrugsResponse>> listOfDrugs(Integer pageNo, Integer pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
+        Page<Drugs> drugsPage = drugRepository.findAll(pageable);
+
+        List<Drugs> filteredDrugsList = drugsPage.getContent().stream()
+                .filter(drug -> drug.getDrugStatus() != DrugStatus.REMOVE)
+                .collect(Collectors.toList());
+
+        List<DrugsResponse> response = filteredDrugsList.stream()
+                .map(drug -> DrugsResponse.builder()
+                        .id(drug.getId())
+                        .name(drug.getDrugName())
+                        .price(drug.getPrice())
+                        .packs(drug.getPacks())
+                        .drugStatus(drug.getDrugStatus())
+                        .merchantId(drug.getMerchant().getId().toString())
+                        .createDate(drug.getCreateDate().toString())
+                        .updateDate(drug.getUpdateAt().toString())
+                        .build()
+                ).collect(Collectors.toList());
+
+
+        int totalElements = filteredDrugsList.size();
+        int totalPages = (int) Math.ceil((double) totalElements / pageable.getPageSize());
+
+        int filteredPageNumber = pageable.getPageNumber();
+        int actualPageSize = response.size();
+
+        PageUtils<DrugsResponse> pageUtils = PageUtils.<DrugsResponse>builder()
+                .content(response)
+                .pageNo(filteredPageNumber)
+                .pageSize(actualPageSize)
+                .totalElement(totalElements)
+                .totalPage(totalPages)
+                .isLast(drugsPage.isLast())
+                .build();
+
+        log.info("RESPONSE: {}", response);
+        return new APIResponse<>(ResponseCode.VIEW_DRUG_REQUEST_SUCCESSFUL.getMessage(), ResponseCode.VIEW_DRUG_REQUEST_SUCCESSFUL.getStatusCode(), pageUtils);
+    }
     @Override
     public APIResponse<String> deleteDrug(DrugDeleteRequest drugDeleteRequest) {
         BaseUser baseUser = userVerification.validateLoginUser(drugDeleteRequest.userEmail());
@@ -159,7 +189,6 @@ public class DrugServiceImpl implements DrugService {
         drugRepository.save(drugs);
         return new APIResponse<>(ResponseCode.VIEW_DRUG_REQUEST_SUCCESSFUL.getMessage(), ResponseCode.VIEW_DRUG_REQUEST_SUCCESSFUL.getStatusCode(),"drugs deleted");
     }
-
     @Override
     public APIResponse<DrugsResponse> updateDrug(DrugsUpdateRequest drugsUpdateRequest) {
         BaseUser baseUser = userVerification.validateLoginUser(drugsUpdateRequest.userEmail());
@@ -187,50 +216,6 @@ public class DrugServiceImpl implements DrugService {
                 .build();
         return new APIResponse<>(ResponseCode.UPDATE_DRUG_REQUEST_SUCCESSFUL.getMessage(),ResponseCode.UPDATE_DRUG_REQUEST_SUCCESSFUL.getStatusCode(),response);
     }
-
-    @Override
-    public APIResponse<List<DrugsResponse>> drugSearch(DrugPageConstant pageConstant, DrugCriteriaSearch drugCriteriaSearch) {
-        Page<Drugs> allWithFilter = drugCriteriaRepository.findAllWithFilter(pageConstant, drugCriteriaSearch);
-
-        List<DrugsResponse> response = allWithFilter.getContent().stream()
-                .filter(drug -> drug.getDrugStatus() != DrugStatus.REMOVE)
-                .map(drug -> DrugsResponse.builder()
-                        .id(drug.getId())
-                        .name(drug.getDrugName())
-                        .price(drug.getPrice())
-                        .packs(drug.getPacks())
-                        .drugStatus(DrugStatus.IN_STOCK)
-                        .merchantId(drug.getMerchant().getId().toString())
-                        .createDate(DateUtils.saveDate(drug.getCreateDate()))
-                        .updateDate(DateUtils.saveDate(drug.getUpdateAt()))
-                        .build()
-                ).collect(Collectors.toList());
-
-        return new APIResponse<>(ResponseCode.VIEW_DRUG_REQUEST_SUCCESSFUL.getMessage(), ResponseCode.VIEW_DRUG_REQUEST_SUCCESSFUL.getStatusCode(), response);
-    }
-    @Override
-    @Transactional(readOnly = true)
-    public APIResponse<List<DrugsResponse>> drugSpecificationSearch(SpecificationInput specificationInput) {
-        Specification<Drugs> specification = DrugSpecifications.byCriteria(specificationInput);
-
-        // Use findAll(Specification<T> spec) instead of findAll(Pageable pageable)
-        List<DrugsResponse> response = drugRepository.findAll(specification).stream()
-                .filter(drug -> drug.getDrugStatus() != DrugStatus.REMOVE)
-                .map(drug -> DrugsResponse.builder()
-                        .id(drug.getId())
-                        .name(drug.getDrugName())
-                        .price(drug.getPrice())
-                        .packs(drug.getPacks())
-                        .drugStatus(DrugStatus.IN_STOCK)
-                        .merchantId(drug.getMerchant().getId().toString())
-                        .createDate(DateUtils.saveDate(drug.getCreateDate()))
-                        .updateDate(DateUtils.saveDate(drug.getUpdateAt()))
-                        .build()
-                ).collect(Collectors.toList());
-        log.info("EHSHJDJHWJDS" + response);
-
-        return new APIResponse<>(ResponseCode.VIEW_DRUG_REQUEST_SUCCESSFUL.getMessage(), ResponseCode.VIEW_DRUG_REQUEST_SUCCESSFUL.getStatusCode(), response);
-}
     private Merchant validatedMerchant(String merchantId){
         return merchantRepository.findById(Long.valueOf(merchantId))
                 .orElseThrow( ()-> new UserNotFoundException("merchant with id: "+ merchantId + "not found"));

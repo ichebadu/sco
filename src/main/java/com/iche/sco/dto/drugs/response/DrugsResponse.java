@@ -1,6 +1,8 @@
 package com.iche.sco.dto.drugs.response;
 
 import com.iche.sco.enums.DrugStatus;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,4 +26,6 @@ public class DrugsResponse {
     private DrugStatus drugStatus;
     private String createDate;
     private String updateDate;
+
+
 }
