@@ -403,7 +403,6 @@ public class CriteriaSpecificationsService {
     public APIResponse<PageUtils<DrugsResponse>> drugListSpecificationSearch(SearchRequest searchRequest) {
         Specification<Drugs> specification = getSpecificationList(searchRequest.getSearchSpecifications(),searchRequest.getOverAllOperation());
 
-
         String sortColumn = searchRequest.getSearchSpecifications().get(0).getSortColumn();
         String sortOrder = searchRequest.getSearchSpecifications().get(0).getSortOrder();
 
