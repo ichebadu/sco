@@ -28,7 +28,7 @@ public class SecurityConfig {
             "/api/v1/auth/payment/initialize-payment",
             "/api/v1/auth/payment/callback",
             "/api/v1/drug/search",
-            "/api/v1/drug/download",
+            "/api/v1/drug/document/**",
             "/v3/api-docs.yaml",
             "/v3/api-docs/**",
             "/swagger-ui/**",
